@@ -15,9 +15,6 @@ public class TaskConfiguration : IEntityTypeConfiguration<Domain.Entities.Task>
 
         builder.Property(t => t.Description)
             .HasMaxLength(1000);
-
-        builder.Property(t => t.Priority)
-            .HasConversion<string>();
     }
 }
 

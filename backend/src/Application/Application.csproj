@@ -19,16 +19,16 @@
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.3" />
 	</ItemGroup>
 	
-  <ItemGroup>
+	<ItemGroup>
 	<ProjectReference Include="..\Domain\Domain.csproj" />
-  </ItemGroup>
+	</ItemGroup>
 	
-  <ItemGroup>
+	<ItemGroup>
 	<Folder Include="Common\Exceptions\" />
 	<Folder Include="Common\Behaviours\" />
+	<Folder Include="Common\Security\" />
 	<Folder Include="Tasks\Commands\CreateTask\" />
 	<Folder Include="Tasks\EventHandlers\" />
-	<Folder Include="Tasks\Queries\GetTasks\" />
-  </ItemGroup>
+	</ItemGroup>
 
 </Project>

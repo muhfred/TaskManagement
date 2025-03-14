@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
-using TaskManagement.Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
+using TaskManagement.Application.Common.Interfaces;
+using TaskManagement.Application.Common.Interfaces.IIdentityService;
 
 namespace TaskManagement.Application.Common.Behaviours;
 

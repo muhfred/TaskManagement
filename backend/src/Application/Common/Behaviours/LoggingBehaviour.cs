@@ -1,6 +1,7 @@
-﻿using TaskManagement.Application.Common.Interfaces;
-using MediatR.Pipeline;
+﻿using MediatR.Pipeline;
 using Microsoft.Extensions.Logging;
+using TaskManagement.Application.Common.Interfaces;
+using TaskManagement.Application.Common.Interfaces.IIdentityService;
 
 namespace TaskManagement.Application.Common.Behaviours;
 

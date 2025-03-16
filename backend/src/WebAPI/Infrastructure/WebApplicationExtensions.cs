@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
-using TaskManagement.Infrastructure.Data.Identity;
 using TaskManagement.Web.Infrastructure;
+using TaskManagement.WebAPI.Hubs;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -11,9 +11,7 @@ public static class WebApplicationExtensions
         var groupName = group.GetType().Name;
 
         return app
-            .MapGroup($"/api/{groupName}")
-            .WithGroupName(groupName)
-            .WithTags(groupName);
+            .MapGroup($"/api/{groupName}");
     }
 
     public static WebApplication MapEndpoints(this WebApplication app)
@@ -33,7 +31,9 @@ public static class WebApplicationExtensions
             }
         }
 
-        app.MapIdentityApi<ApplicationUser>();
+        app.UseCors("CorsPolicy");
+
+        app.MapHub<TaskHub>("/taskHub");
 
         return app;
     }

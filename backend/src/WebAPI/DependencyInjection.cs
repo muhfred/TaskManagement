@@ -10,6 +10,8 @@ public static class DependencyInjection
 {
     public static void AddWebServices(this IHostApplicationBuilder builder)
     {
+        builder.Services.AddSignalR();
+
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
         builder.Services.AddScoped<IUser, CurrentUser>();
@@ -24,8 +26,10 @@ public static class DependencyInjection
         builder.Services.Configure<ApiBehaviorOptions>(options =>
             options.SuppressModelStateInvalidFilter = true);
 
-        builder.Services.AddEndpointsApiExplorer();
-
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
+                builder.WithOrigins("http://localhost:3000") // Your Next.js app URL
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()));
     }
 }

@@ -6,6 +6,7 @@ using TaskManagement.Application.Common.Interfaces;
 using TaskManagement.Application.Common.Interfaces.IIdentityService;
 using TaskManagement.Domain.Constants;
 using TaskManagement.Infrastructure.Data;
+using TaskManagement.Infrastructure.Data.AIServiceIntegration;
 using TaskManagement.Infrastructure.Data.Identity;
 using TaskManagement.Infrastructure.Data.Interceptors;
 
@@ -28,6 +29,7 @@ public static class DependencyInjection
         });
 
 
+
         builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
         builder.Services.AddScoped<ApplicationDbContextInitialiser>();
@@ -40,14 +42,13 @@ public static class DependencyInjection
 
         builder.Services.AddSingleton(TimeProvider.System);
         builder.Services.AddTransient<IIdentityService, IdentityService>();
+        builder.Services.AddTransient<IAIService, AIService>();
 
         builder.Services.AddAuthorization(options =>
             options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
 
 
-        builder.Services.AddAuthentication()
-            .AddCookie(IdentityConstants.ApplicationScheme)
-            .AddBearerToken(IdentityConstants.BearerScheme);
+        builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
     }
 }
 

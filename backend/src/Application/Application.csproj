@@ -27,8 +27,6 @@
 	<Folder Include="Common\Exceptions\" />
 	<Folder Include="Common\Behaviours\" />
 	<Folder Include="Common\Security\" />
-	<Folder Include="Tasks\Commands\CreateTask\" />
-	<Folder Include="Tasks\EventHandlers\" />
 	</ItemGroup>
 
 </Project>

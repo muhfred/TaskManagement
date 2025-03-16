@@ -5,20 +5,20 @@ public class Task : BaseAuditableEntity
     public required string Title { get; set; }
     public string? Description { get; set; }
     public Priority Priority { get; set; } = Priority.None;
-    public string IdentityUserId { get; set; }
+    public string? IdentityUserId { get; set; }
 
-    private bool _IsCompleted;
+    private bool _isCompleted;
 
     public bool IsCompleted
     {
-        get => _IsCompleted;
+        get => _isCompleted;
         set
         {
-            if (value && !_IsCompleted)
+            if (value && !_isCompleted)
             {
                 AddDomainEvent(new Events.TaskCompletedEvent(this));
             }
-            _IsCompleted = value;
+            _isCompleted = value;
         }
     }
 }

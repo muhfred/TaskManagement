@@ -1,3 +1,4 @@
+using Scalar.AspNetCore;
 using TaskManagement.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,10 +18,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/openapi/v1.json", "TaskManagement.WebAPI v1");
-    });
+    app.MapScalarApiReference(options => options.Title = "Task Management API");
+
     await app.InitialiseDatabaseAsync();
 }
 

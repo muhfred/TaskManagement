@@ -14,7 +14,6 @@ public class TaskDto
         public Mapping()
         {
             CreateMap<Domain.Entities.Task, TaskDto>();
-            CreateMap<Domain.Entities.Task, TaskViewModel>();
         }
     }
 }

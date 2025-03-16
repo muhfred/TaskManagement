@@ -1,9 +1,9 @@
 ﻿using TaskManagement.Application.Tasks.Queries.GetTasksWithPagination;
 
 namespace TaskManagement.Application.Tasks.Queries.GetTasks;
-public class GaetTasksWithPaginationQueryValidator : AbstractValidator<GetTasksWithPaginationQuery>
+public class GetTasksWithPaginationQueryValidator : AbstractValidator<GetTasksWithPaginationQuery>
 {
-    public GaetTasksWithPaginationQueryValidator()
+    public GetTasksWithPaginationQueryValidator()
     {
 
         RuleFor(x => x.PageNumber)

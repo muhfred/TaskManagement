@@ -21,8 +21,7 @@ public class Tasks : EndpointGroupBase
             .MapPut(UpdateTask, "{id}")
             .MapDelete(DeleteTask, "{id}");
     }
-
-    public async Task<Ok<PaginatedList<TaskViewModel>>> GetTasksWithPagination(ISender sender, [AsParameters] GetTasksWithPaginationQuery query)
+    public async Task<Ok<PaginatedList<TaskDto>>> GetTasksWithPagination(ISender sender, [AsParameters] GetTasksWithPaginationQuery query)
     {
         var result = await sender.Send(query);
 

@@ -5,13 +5,13 @@ using TaskManagement.Application.Tasks.Queries.GetTasks;
 
 namespace TaskManagement.Application.Tasks.Queries.GetTasksWithPagination;
 
-public record GetTasksWithPaginationQuery : IRequest<PaginatedList<TaskViewModel>>
+public record GetTasksWithPaginationQuery : IRequest<PaginatedList<TaskDto>>
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 }
 
-public class GetTasksWithPaginationQueryHandler : IRequestHandler<GetTasksWithPaginationQuery, PaginatedList<TaskViewModel>>
+public class GetTasksWithPaginationQueryHandler : IRequestHandler<GetTasksWithPaginationQuery, PaginatedList<TaskDto>>
 {
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
@@ -22,11 +22,11 @@ public class GetTasksWithPaginationQueryHandler : IRequestHandler<GetTasksWithPa
         _mapper = mapper;
     }
 
-    public async Task<PaginatedList<TaskViewModel>> Handle(GetTasksWithPaginationQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<TaskDto>> Handle(GetTasksWithPaginationQuery request, CancellationToken cancellationToken)
     {
         return await _context.Tasks
             .OrderBy(x => x.Title)
-            .ProjectTo<TaskViewModel>(_mapper.ConfigurationProvider)
+            .ProjectTo<TaskDto>(_mapper.ConfigurationProvider)
             .PaginatedListAsync(request.PageNumber, request.PageSize);
     }
 }

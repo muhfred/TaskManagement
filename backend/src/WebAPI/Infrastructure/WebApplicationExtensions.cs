@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
+using TaskManagement.Application.Tasks.Hubs;
 using TaskManagement.Web.Infrastructure;
-using TaskManagement.WebAPI.Hubs;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -33,7 +33,9 @@ public static class WebApplicationExtensions
 
         app.UseCors("CorsPolicy");
 
-        app.MapHub<TaskHub>("/taskHub");
+        app.MapHub<TaskNotificationHub>("/taskNotificationHub");
+
+        app.UseExceptionHandler();
 
         return app;
     }

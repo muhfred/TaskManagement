@@ -17,7 +17,7 @@ public class UpdateTaskCommandHandler : IRequestHandler<UpdateTaskCommand>
     public async Task Handle(UpdateTaskCommand request, CancellationToken cancellationToken)
     {
         var entity = await _context.Tasks
-            .FindAsync(new object[] { request.Id }, cancellationToken);
+            .FindAsync([request.Id], cancellationToken);
 
         Guard.Against.NotFound(request.Id, entity);
 

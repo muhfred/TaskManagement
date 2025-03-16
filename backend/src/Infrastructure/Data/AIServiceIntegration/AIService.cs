@@ -60,7 +60,7 @@ public class AIService : IAIService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error analyzing task priority with AI service");
-            // Default to Medium priority if AI analysis fails
+            // Default to None priority if AI analysis fails
             return Priority.None;
         }
     }

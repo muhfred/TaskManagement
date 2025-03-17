@@ -48,7 +48,7 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, int>
 
             entity.AddDomainEvent(new TaskCreatedEvent(entity));
 
-            await _hubContext.Clients.User(entity.IdentityUserId).SendAsync("TaskCompleted", entity.Id, cancellationToken: cancellationToken);
+            await _hubContext.Clients.User(entity.IdentityUserId).SendAsync("ReceiveMessage", entity, cancellationToken: cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
 

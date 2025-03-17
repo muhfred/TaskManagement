@@ -34,6 +34,7 @@ public static class WebApplicationExtensions
         app.UseCors("CorsPolicy");
 
         app.MapHub<TaskNotificationHub>("/taskNotificationHub");
+        app.MapHub<MessagingHub>("/hub");
 
         app.UseExceptionHandler();
 

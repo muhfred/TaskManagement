@@ -66,6 +66,7 @@ The application integrates with OpenAI's API to analyze task descriptions and su
 ### Prerequisites
 - .NET 7.0 SDK or later
 - Node.js 16 or later
+- Bun 1.2.5
 - PostgreSQL database
 - GeminiAI API key
 
@@ -110,17 +111,17 @@ The application integrates with OpenAI's API to analyze task descriptions and su
 
 2. Install dependencies:
    ```bash
-   npm install
+   bun install
    ```
 
 3. Update the `.env.local` file with your backend API URL:
    ```
-   NEXT_PUBLIC_API_URL=https://localhost:7181
+   NEXT_PUBLIC_API_URL=https://localhost:5001
    ```
 
 4. Start the development server:
    ```bash
-   npm run dev
+   bun --bun run dev
    ```
 
 5. Open your browser and navigate to `http://localhost:3000`

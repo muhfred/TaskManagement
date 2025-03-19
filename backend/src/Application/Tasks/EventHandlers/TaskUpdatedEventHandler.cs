@@ -5,22 +5,20 @@ using TaskManagement.Domain.Events;
 
 namespace TaskManagement.Application.Tasks.EventHandlers;
 
-
-public class TaskCompletedEventHandler : INotificationHandler<TaskCompletedEvent>
+public class TaskUpdatedEventHandler : INotificationHandler<TaskUpdatedEvent>
 {
-    private readonly ILogger<TaskCompletedEventHandler> _logger;
+    private readonly ILogger<TaskCreatedEventHandler> _logger;
     private readonly IHubContext<TaskNotificationHub> _hubContext;
-    public TaskCompletedEventHandler(ILogger<TaskCompletedEventHandler> logger, IHubContext<TaskNotificationHub> hubContext)
+    public TaskUpdatedEventHandler(ILogger<TaskCreatedEventHandler> logger, IHubContext<TaskNotificationHub> hubContext)
     {
         _logger = logger;
         _hubContext = hubContext;
     }
-
-    public Task Handle(TaskCompletedEvent notification, CancellationToken cancellationToken)
+    public Task Handle(TaskUpdatedEvent notification, CancellationToken cancellationToken)
     {
         _logger.LogInformation("TaskManagement Domain Event: {DomainEvent}", notification.GetType().Name);
-        _hubContext.Clients.All.SendAsync("TaskCompleted", notification);
+        _hubContext.Clients.All.SendAsync("TaskPriorityUpdated", notification);
+
         return Task.CompletedTask;
     }
 }
-

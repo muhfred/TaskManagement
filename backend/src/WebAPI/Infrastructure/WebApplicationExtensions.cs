@@ -33,10 +33,11 @@ public static class WebApplicationExtensions
 
         app.UseCors("CorsPolicy");
 
-        app.MapHub<TaskNotificationHub>("/taskNotificationHub");
-        app.MapHub<MessagingHub>("/hub");
+        app.MapHub<TaskNotificationHub>("/taskhub");
 
         app.UseExceptionHandler();
+
+        app.MapRazorPages();
 
         return app;
     }

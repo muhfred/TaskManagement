@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using TaskManagement.Application.Common.Interfaces;
 using TaskManagement.Domain.Enums;
 
-namespace TaskManagement.Infrastructure.Data.AIServiceIntegration;
+namespace TaskManagement.Infrastructure.Data.Services;
 
 public class AIService : IAIService
 {

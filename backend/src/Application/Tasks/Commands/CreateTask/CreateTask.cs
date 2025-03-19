@@ -1,64 +1,80 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using TaskManagement.Application.Common.Interfaces;
+﻿using TaskManagement.Application.Common.Interfaces;
 using TaskManagement.Application.Common.Security;
-using TaskManagement.Application.Tasks.Hubs;
+using TaskManagement.Application.Tasks.Queries.GetTasks;
+using TaskManagement.Domain.Enums;
 using TaskManagement.Domain.Events;
 
 namespace TaskManagement.Application.Tasks.Commands.CreateTask;
 
 [Authorize]
-public record CreateTaskCommand(string Title, string Description, int Priority) : IRequest<int>;
-public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, int>
+public record CreateTaskCommand(string Title, string Description) : IRequest<TaskDto>;
+public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, TaskDto>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IHubContext<TaskNotificationHub> _hubContext;
+
     private readonly IAIService _aIService;
     private readonly IUser _currentUser;
-    public CreateTaskCommandHandler(IApplicationDbContext context, IAIService aIService, IHubContext<TaskNotificationHub> hubContext, IUser currentUser)
+    private readonly IMapper _mapper;
+    public CreateTaskCommandHandler(IApplicationDbContext context, IAIService aIService, IUser currentUser, IMapper mapper)
     {
         _context = context;
         _aIService = aIService;
-        _hubContext = hubContext;
         _currentUser = currentUser;
+        _mapper = mapper;
     }
-    public async Task<int> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
+    public async Task<TaskDto> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
     {
-        using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
-
-        try
+        var entity = new Domain.Entities.Task
         {
-            var description = request.Description ?? string.Empty;
+            Title = request.Title,
+            Description = request.Description,
+            IdentityUserId = _currentUser.Id,
+            IsCompleted = false
+        };
 
-            var result = await _aIService.AnalyzeTaskPriorityAsync(description).ConfigureAwait(true);
+        _context.Tasks.Add(entity);
 
-            var entity = new Domain.Entities.Task
+        await _context.SaveChangesAsync(cancellationToken);
+
+        entity.AddDomainEvent(new TaskCreatedEvent(entity));
+
+        if (!string.IsNullOrEmpty(request.Description))
+        {
+            try
             {
-                Title = request.Title,
-                Description = request.Description,
-                IdentityUserId = _currentUser.Id,
-                IsCompleted = false,
-                Priority = result
-            };
-
-            _context.Tasks.Add(entity);
-
-            await transaction.CreateSavepointAsync("BeforeSaving", cancellationToken);
-
-            await _context.SaveChangesAsync(cancellationToken);
-
-            entity.AddDomainEvent(new TaskCreatedEvent(entity));
-
-            await _hubContext.Clients.User(entity.IdentityUserId).SendAsync("ReceiveMessage", entity, cancellationToken: cancellationToken);
-
-            await transaction.CommitAsync(cancellationToken);
-
-            return entity.Id;
+                var suggestedPriority = await _aIService.AnalyzeTaskPriorityAsync(request.Description).ConfigureAwait(true);
+                var taskDto = await UpdateTaskPriorityAsync(entity.Id, suggestedPriority, cancellationToken);
+                if (taskDto.Id > 0)
+                {
+                    entity.AddDomainEvent(new TaskUpdatedEvent(entity));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error analyzing task priority: {ex.Message}");
+                // Continue without setting priority
+            }
         }
-        catch (Exception ex)
+
+        return new TaskDto
         {
-            await transaction.RollbackToSavepointAsync("BeforeSaving", cancellationToken);
-            Console.WriteLine(ex.Message);
-            return 0;
+            Id = entity.Id,
+            Title = entity.Title,
+            Description = entity.Description,
+            IsCompleted = entity.IsCompleted
+        };
+    }
+
+    private async Task<TaskDto> UpdateTaskPriorityAsync(int taskId, Priority priority, CancellationToken cancellationToken)
+    {
+        var task = await _context.Tasks.FindAsync([taskId], cancellationToken);
+        if (task == null)
+        {
+            return new TaskDto();
         }
+        task.Priority = priority;
+        task.AddDomainEvent(new TaskUpdatedEvent(task));
+        await _context.SaveChangesAsync(cancellationToken);
+        return _mapper.Map<TaskDto>(task);
     }
 }

@@ -1,11 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
-using TaskManagement.Application.Common.Models;
 using TaskManagement.Application.Tasks.Commands.CreateTask;
 using TaskManagement.Application.Tasks.Commands.DeleteTask;
 using TaskManagement.Application.Tasks.Commands.UpdateTask;
 using TaskManagement.Application.Tasks.Queries.GetTasks;
-using TaskManagement.Application.Tasks.Queries.GetTasksWithPagination;
 using TaskManagement.Web.Infrastructure;
 
 namespace TaskManagement.WebAPI.Endpoints;
@@ -16,33 +14,32 @@ public class Tasks : EndpointGroupBase
     {
         app.MapGroup(this)
             .RequireAuthorization()
-            .MapGet(GetTasksWithPagination)
+            .MapGet(GetTasks)
             .MapPost(CreateTask)
             .MapPut(UpdateTask, "{id}")
             .MapDelete(DeleteTask, "{id}");
     }
-    public async Task<Ok<PaginatedList<TaskDto>>> GetTasksWithPagination(ISender sender, [AsParameters] GetTasksWithPaginationQuery query)
+    public async Task<Ok<List<TaskDto>>> GetTasks(ISender sender)
     {
-        var result = await sender.Send(query);
+        var result = await sender.Send(new GetTasksQuery());
 
         return TypedResults.Ok(result);
     }
 
 
-    public async Task<Created<int>> CreateTask(ISender sender, CreateTaskCommand command)
+    public async Task<Ok<TaskDto>> CreateTask(ISender sender, CreateTaskCommand command)
     {
-        var id = await sender.Send(command);
+        var task = await sender.Send(command);
 
-        return TypedResults.Created($"/{nameof(Tasks)}/{id}", id);
+        return TypedResults.Ok(task);
     }
 
-    public async Task<Results<NoContent, BadRequest>> UpdateTask(ISender sender, int id, UpdateTaskCommand command)
+    public async Task<Ok<TaskDto>> UpdateTask(ISender sender, int id)
     {
-        if (id != command.Id) return TypedResults.BadRequest();
 
-        await sender.Send(command);
+        var task = await sender.Send(new UpdateTaskCommand(id));
 
-        return TypedResults.NoContent();
+        return TypedResults.Ok(task);
     }
 
     public async Task<NoContent> DeleteTask(ISender sender, int id)

@@ -1,7 +1,7 @@
 # Task Management Application with Event-Driven Architecture
 
 This project demonstrates a full-stack task management application using ASP.NET Core for the backend and Next.js for the frontend, implementing event-driven architecture with real-time updates and AI-powered task prioritization.
-
+![architecture_overview](https://github.com/muhfred/TaskManagement/blob/main/Untitled-2024-09-15-0839.excalidraw.png)
 ## Features
 
 - **Event-Driven Architecture**: Using SignalR for real-time communication between backend and frontend
@@ -67,7 +67,7 @@ The application integrates with OpenAI's API to analyze task descriptions and su
 - .NET 7.0 SDK or later
 - Node.js 16 or later
 - PostgreSQL database
-- OpenAI API key
+- GeminiAI API key
 
 ### Backend Setup
 

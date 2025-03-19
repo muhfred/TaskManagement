@@ -93,7 +93,7 @@ The application integrates with OpenAI's API to analyze task descriptions and su
 
 4. Run the migrations to create the database:
    ```bash
-   dotnet ef database update
+   dotnet ef migrations add "SampleMigration" --project src\Infrastructure --startup-project src\Web --output-dir Data\Migrations
    ```
 
 5. Start the backend server:

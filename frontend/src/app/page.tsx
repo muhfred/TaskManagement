@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import TaskForm from './components/TaskForm';
 import TaskList from './components/TaskList';
-import { CreateTaskRequest, Task } from './types/task';
+import { Task } from './types/task';
 import {
   getAllTasks,
   createTask,
@@ -43,13 +43,6 @@ export default function Home() {
             prevTasks.map((t) => (t.id === task.id ? task : t))
           );
         });
-
-        signalRService.onTaskPriorityUpdated((task) => {
-          console.log('Task priority updated event received:', task);
-          setTasks((prevTasks) =>
-            prevTasks.map((t) => (t.id === task.id ? task : t))
-          );
-        });
       } catch (error) {
         console.error('Failed to connect to SignalR:', error);
         setError(
@@ -75,10 +68,13 @@ export default function Home() {
     fetchTasks();
   }, []);
 
-  const handleCreateTask = async (newTask: CreateTaskRequest) => {
+  const handleCreateTask = async (newTask: Task) => {
     try {
       await createTask(newTask);
-      // No need to update state here as the SignalR event will handle it
+      setTasks((prevTasks) => {
+        // Check if the task already exists to avoid duplicates
+        return [newTask, ...prevTasks];
+      });
     } catch (error) {
       console.error('Error creating task:', error);
       setError('Failed to create task. Please try again.');
@@ -88,7 +84,11 @@ export default function Home() {
   const handleCompleteTask = async (taskId: number) => {
     try {
       await completeTask(taskId);
-      // No need to update state here as the SignalR event will handle it
+      setTasks((prevTasks) =>
+        prevTasks.map((t) =>
+          t.id === taskId ? { ...t, isCompleted: true } : t
+        )
+      );
     } catch (error) {
       console.error('Error completing task:', error);
       setError('Failed to complete task. Please try again.');
@@ -105,7 +105,6 @@ export default function Home() {
       setError('Failed to delete task. Please try again.');
     }
   };
-
   const router = useRouter();
 
   useEffect(() => {

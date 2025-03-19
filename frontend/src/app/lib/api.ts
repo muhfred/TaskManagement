@@ -1,6 +1,6 @@
 // frontend/lib/api.ts
 import axios from 'axios';
-import { CreateTaskRequest, Task } from '../types/task';
+import { Task } from '../types/task';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://localhost:5001/api';
 
@@ -105,9 +105,10 @@ export async function getAllTasks(): Promise<Task[]> {
   }
 }
 
-export async function createTask(task: CreateTaskRequest): Promise<void> {
+export async function createTask(task: Task): Promise<Task> {
   try {
     const response = await apiClient.post(API_URL + '/api/tasks', task);
+    console.log('Task created:', response.data);
     return response.data;
   } catch (error) {
     console.error('Error creating task:', error);

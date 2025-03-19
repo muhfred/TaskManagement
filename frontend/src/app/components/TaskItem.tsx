@@ -34,20 +34,20 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onComplete, onDelete }) => {
             </p>
           )}
           <div className="mt-2 flex items-center space-x-2">
-            <PriorityBadge priority={task.priority} />
+            {task !== undefined && <PriorityBadge task={task} />}
           </div>
         </div>
         <div className="flex space-x-2">
           {!task.isCompleted && (
             <button
-              onClick={() => onComplete(task.id, task)}
+              onClick={() => task.id !== undefined && onComplete(task.id, task)}
               className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
             >
               Complete
             </button>
           )}
           <button
-            onClick={() => onDelete(task.id)}
+            onClick={() => task.id !== undefined && onDelete(task.id)}
             className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
           >
             Delete

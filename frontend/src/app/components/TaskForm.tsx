@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { CreateTaskRequest } from '../types/task';
+import { Task } from '../types/task';
 
 interface TaskFormProps {
-  onSubmit: (task: CreateTaskRequest) => Promise<void>;
+  onSubmit: (task: Task) => Promise<void>;
 }
 
 const TaskForm: React.FC<TaskFormProps> = ({ onSubmit }) => {

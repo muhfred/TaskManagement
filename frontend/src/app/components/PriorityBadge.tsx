@@ -1,15 +1,19 @@
 import React from 'react';
-import { Priority } from '../types/task';
+import { Task } from '../types/task';
 
 interface PriorityBadgeProps {
-  priority: Priority;
+  task: Task;
 }
 
-const PriorityBadge: React.FC<PriorityBadgeProps> = ({ priority }) => {
+const PriorityBadge: React.FC<PriorityBadgeProps> = ({ task }) => {
   let bgColor = 'bg-gray-200';
   let textColor = 'text-gray-800';
 
-  switch (priority) {
+  switch (task.priority) {
+    case 'None':
+      bgColor = 'bg-gray-200';
+      textColor = 'text-gray-800';
+      break;
     case 'Low':
       bgColor = 'bg-green-100';
       textColor = 'text-green-800';
@@ -28,7 +32,7 @@ const PriorityBadge: React.FC<PriorityBadgeProps> = ({ priority }) => {
     <span
       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${bgColor} ${textColor}`}
     >
-      {priority}
+      {task.priority}
     </span>
   );
 };

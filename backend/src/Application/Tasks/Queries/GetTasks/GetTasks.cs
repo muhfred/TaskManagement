@@ -19,7 +19,7 @@ public class GetTasksQueryHandler : IRequestHandler<GetTasksQuery, List<TaskDto>
 
     public async Task<List<TaskDto>> Handle(GetTasksQuery request, CancellationToken cancellationToken)
     {
-        var tasks = await _context.Tasks.ToListAsync(cancellationToken);
+        var tasks = await _context.Tasks.OrderByDescending(x => x.CreatedAt).ToListAsync(cancellationToken);
         return _mapper.Map<List<TaskDto>>(tasks);
     }
 }

@@ -1,11 +1,11 @@
-export type Priority = 'Low' | 'Medium' | 'High' | 'Not Set';
+export type Priority = 'Low' | 'Medium' | 'High' | 'None';
 
 export interface Task {
-  id: number;
-  title: string;
-  description: string;
-  priority: Priority;
-  isCompleted: boolean;
+  id?: number;
+  title?: string;
+  description?: string;
+  priority?: Priority;
+  isCompleted?: boolean;
 }
 
 export interface CreateTaskRequest {

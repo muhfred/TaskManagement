@@ -101,6 +101,7 @@ export async function getAllTasks(): Promise<Task[]> {
     return response.data;
   } catch (error) {
     console.error('Error fetching tasks:', error);
+    window.location.href = '/login';
     throw new Error('Failed to fetch tasks');
   }
 }

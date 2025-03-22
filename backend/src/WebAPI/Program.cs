@@ -31,7 +31,7 @@ var securityReq = new OpenApiSecurityRequirement()
                 Id = "Bearer"
             }
         },
-        new string[] {}
+        Array.Empty<string>()
     }
 };
 

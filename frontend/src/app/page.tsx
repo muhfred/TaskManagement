@@ -72,7 +72,6 @@ export default function Home() {
     try {
       await createTask(newTask);
       setTasks((prevTasks) => {
-        // Check if the task already exists to avoid duplicates
         return [newTask, ...prevTasks];
       });
     } catch (error) {

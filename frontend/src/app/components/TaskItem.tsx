@@ -34,7 +34,9 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onComplete, onDelete }) => {
             </p>
           )}
           <div className="mt-2 flex items-center space-x-2">
-            {task !== undefined && <PriorityBadge task={task} />}
+            {task.priority !== undefined && (
+              <PriorityBadge priority={task.priority} />
+            )}
           </div>
         </div>
         <div className="flex space-x-2">
